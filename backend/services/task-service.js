@@ -1,4 +1,4 @@
-const Task = require('../models/taskModel');
+const Task = require('../models/task-model');
 
 const taskService = {
   createTask: async (taskDescription) => {
@@ -15,4 +15,4 @@ const taskService = {
   }
 };
 
-module.exports(taskService);
+module.exports = taskService;
