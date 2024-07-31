@@ -2,29 +2,29 @@ const taskService = require('../services/task-service');
 
 //check sql injection
 const taskController = {
-  create: async (req, res) => {
+  createTask: async (req, res) => {
     const { description } = req.body;
     try {
-      const id = await taskService.create(description)
+      const id = await taskService.createTask(description)
       return res.status(201).json(id);
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }
   },
 
-  delete: async (req, res) => {
+  deleteTask: async (req, res) => {
     const { id } = req.body;
     try {
-      await taskService.delete(id);
+      await taskService.deleteTask(id);
       return res.status(200);
     } catch (error) {
       return res.status(401).json({ error: error.message })
     }
   },
 
-  all: async (req, res) => {
+  getAllTasks: async (req, res) => {
     try {
-      await taskService.all();
+      await taskService.getAllTasks();
       return res.status(200);
     } catch (error) {
       return res.status(400).json({ error: error.message });
