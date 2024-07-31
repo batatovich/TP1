@@ -14,6 +14,8 @@ app.use('/api/tasks', routes);
 
 // Start the server
 const PORT = process.env.SERVER_PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+app.listen(PORT, (error) => {
+  if (!error) { console.log("Server is running, listening on port " + PORT) }
+  else { console.log("Error occurred, server can't start", error) }
+}
+);
