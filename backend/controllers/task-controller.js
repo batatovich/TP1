@@ -2,34 +2,49 @@ const taskService = require('../services/task-service');
 
 //check sql injection
 const taskController = {
-  create: async (req, res) => {
-    const { description } = req.body;
+  createTask: async (req, res) => {
     try {
-      const id = await taskService.create(description)
-      return res.status(201).json(id);
+      const task = await taskService.createTask(req.body.description)
+      return res.status(201).json(task);
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }
   },
 
-  delete: async (req, res) => {
-    const { id } = req.body;
+  deleteTask: async (req, res) => {
     try {
-      await taskService.delete(id);
-      return res.status(200);
+      await taskService.deleteTask(req.body.id);
+      return res.status(200).json('Task successfully deleted');
     } catch (error) {
       return res.status(401).json({ error: error.message })
     }
   },
 
-  all: async (req, res) => {
+  getAllTasks: async (req, res) => {
     try {
-      await taskService.all();
-      return res.status(200);
+      const tasks = await taskService.getAllTasks();
+      return res.status(200).json(tasks);
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }
-  }
+  },
+
+  updateTask: async (req, res) => {
+    try {
+      const taskId = req.params.id;
+      const { description } = req.body;
+
+      const updatedTask = await taskService.updateTask(taskId, { description });
+      if (!updatedTask) {
+        return res.status(404).json({ message: 'Task not found' });
+      }
+      res.status(200).json(updatedTask);
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
+    }
+  },
+
+
 }
 
 module.exports = taskController;
