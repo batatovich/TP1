@@ -1,30 +1,52 @@
 const Task = require('../models/task-model');
 
+class ValidationError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'ValidationError';
+  }
+}
+
+class NotFoundError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'NotFoundError';
+  }
+}
+
 const taskService = {
-  createTask: async (taskDescription) => {
-    const task = await Task.create({ description: taskDescription });
+  createTask: async (description) => {
+    if (!description || description.trim() === '') {
+      throw new ValidationError('Description is required');
+    }
+    // Assume Task is a Sequelize model
+    const task = await Task.create({ description });
     return task;
+  },
+
+  deleteTask: async (id) => {
+    const task = await Task.findByPk(id);
+    if (!task) {
+      throw new NotFoundError('Task not found');
+    }
+    await task.destroy();
+    return true;
   },
 
   getAllTasks: async () => {
     return await Task.findAll();
   },
 
-  deleteTask: async (taskId) => {
-    await Task.destroy({ where: { id: taskId } })
-  },
-
-  updateTask: async (taskId, updatedData) => {
-    const [updated, updatedTasks] = await Task.update(updatedData, {
-      where: { id: taskId },
-      returning: true,
-    });
-
-    if (updated === 0) {
-      return null;
-    } else {
-      return updatedTasks[0]
+  updateTask: async (id, data) => {
+    const task = await Task.findByPk(id);
+    if (!task) {
+      throw new NotFoundError('Task not found');
     }
+    if (!data.description || data.description.trim() === '') {
+      throw new ValidationError('Description is required');
+    }
+    await task.update(data);
+    return task;
   },
 };
 
