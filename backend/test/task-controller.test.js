@@ -2,8 +2,8 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const request = require('supertest');
 const express = require('express');
-const taskController = require('.././controllers/task-controller');
-const taskService = require('.././services/task-service');
+const taskController = require('../controllers/task-controller');
+const taskService = require('../services/task-service');
 
 const app = express();
 app.use(express.json());
