@@ -1,10 +1,10 @@
 {
-  "name": "your-app-name",
+  "name": "Task manager",
   "version": "1.0.0",
-  "description": "Your app description",
+  "description": "Manages tasks",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node backend/app.js",
     "test": "mocha 'backend/test/**/*.js' --exit",
     "test:watch": "mocha --watch 'backend/tests/**/*.js'"
   },
