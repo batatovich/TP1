@@ -12,7 +12,20 @@ const taskService = {
 
   deleteTask: async (taskId) => {
     await Task.destroy({ where: { id: taskId } })
-  }
+  },
+
+  updateTask: async (taskId, updatedData) => {
+    const [updated, updatedTasks] = await Task.update(updatedData, {
+      where: { id: taskId },
+      returning: true,
+    });
+
+    if (updated === 0) {
+      return null;
+    } else {
+      return updatedTasks[0]
+    }
+  },
 };
 
 module.exports = taskService;

@@ -27,7 +27,24 @@ const taskController = {
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }
-  }
+  },
+
+  updateTask: async (req, res) => {
+    try {
+      const taskId = req.params.id;
+      const { description } = req.body;
+
+      const updatedTask = await taskService.updateTask(taskId, { description });
+      if (!updatedTask) {
+        return res.status(404).json({ message: 'Task not found' });
+      }
+      res.status(200).json(updatedTask);
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
+    }
+  },
+
+
 }
 
 module.exports = taskController;
