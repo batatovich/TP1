@@ -7,14 +7,24 @@ const TaskManager = () => {
   const [taskId, setTaskId] = useState(null);
 
   useEffect(() => {
+    const savedTasks = localStorage.getItem('tasks');
+    if (savedTasks) {
+      setTasks(JSON.parse(savedTasks));
+    } else {
+      syncTasks();
+    }
+  }, []);
+
+  const syncTasks = () => {
     taskService.getAllTasks()
-      .then(tasks => {
-        setTasks(tasks);
+      .then(fetchedTasks => {
+        setTasks(fetchedTasks);
+        localStorage.setItem('tasks', JSON.stringify(fetchedTasks));
       })
       .catch(error => {
         console.error('There was an error fetching the tasks!', error);
       });
-  }, []);
+  };
 
   const handleNewTask = () => {
     if (taskDescription.trim()) {
@@ -90,7 +100,9 @@ const TaskManager = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Task Description
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider"></th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-200 hover:text-gray-400 uppercase tracking-wider">
+                <button onClick={syncTasks}>Sync</button>
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
