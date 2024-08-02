@@ -4,13 +4,16 @@
   "description": "Manages tasks",
   "main": "app.js",
   "scripts": {
-    "start": "node backend/app.js",
+    "start": "concurrently \"npm run start-backend\" \"npm run start-frontend\"",
+    "start-backend": "node backend/app.js",
+    "start-frontend": "npm start --prefix frontend",
     "test": "mocha 'backend/test/**/*.js' --exit",
     "test:watch": "mocha --watch 'backend/tests/**/*.js'"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
     "chai": "^4.2.0",
+    "concurrently": "^8.2.2",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "mocha": "^10.7.0",

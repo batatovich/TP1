@@ -1,8 +1,10 @@
 import axios from 'axios';
-const path = require('path');
-const dotenv = require('dotenv');
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
-const API_URL = process.env.API_URL;
+//const path = require('path');
+//const dotenv = require('dotenv');
+//dotenv.config({ path: path.resolve(__dirname, '../.env') });
+//const API_URL = process.env.API_URL;
+
+const API_URL = 'http://localhost:3001/api/tasks';
 
 const getAllTasks = async () => {
   try {
