@@ -1,5 +1,5 @@
 {
-  "name": "Task manager",
+  "name": "task-manager",
   "version": "1.0.0",
   "description": "Manages tasks",
   "main": "app.js",

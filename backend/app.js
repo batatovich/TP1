@@ -25,13 +25,13 @@ async function main() {
     console.log('Database synced successfully.');
 
     // Start server
-    const PORT = process.env.SERVER_PORT || 3000;
+    const PORT = process.env.SERVER_PORT || 3001;
     app.listen(PORT, () => {
       console.log(`Server is running, listening on port ${PORT}`);
     });
   } catch (error) {
     console.error('Error during app initialization:', error);
-    process.exit(1); 
+    process.exit(1);
   }
 }
 
