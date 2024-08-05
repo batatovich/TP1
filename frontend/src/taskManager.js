@@ -120,7 +120,7 @@ const TaskManager = () => {
                   </button>
                   <button
                     className="text-red-500 hover:text-red-700"
-                    onClick={() => { handleDeleteTask(task.id) }}
+                    onClick={() => { handleDeleteTask(task.id); }}
                   >
                     Delete
                   </button>
