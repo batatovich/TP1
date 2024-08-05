@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import taskService from './taskService';
+import taskService from '../taskService';
 
 const TaskManager = () => {
   const [tasks, setTasks] = useState([]);

@@ -1,5 +1,5 @@
 import './App.css';
-import TaskManager from './taskManager';
+import TaskManager from './components/taskManager';
 import React from 'react';
 
 function App() {
