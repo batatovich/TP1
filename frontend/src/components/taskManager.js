@@ -30,7 +30,11 @@ const TaskManager = () => {
     if (taskDescription.trim()) {
       taskService.createTask(taskDescription)
         .then(newTask => {
-          setTasks([...tasks, newTask]);
+          setTasks(prevTasks => {
+            const updatedTasks = [newTask, ...prevTasks];
+            localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+            return updatedTasks;
+          });
           setTaskDescription('');
         })
         .catch(error => {
@@ -42,12 +46,17 @@ const TaskManager = () => {
   const handleDeleteTask = (taskId) => {
     taskService.deleteTask(taskId)
       .then(() => {
-        setTasks(tasks.filter(task => task.id !== taskId));
+        setTasks(prevTasks => {
+          const updatedTasks = prevTasks.filter(task => task.id !== taskId);
+          localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+          return updatedTasks;
+        });
       })
       .catch((error) => {
         console.error('There was an error deleting the task!', error);
       });
   };
+
 
   const handleEditTask = (task) => {
     setTaskId(task.id);

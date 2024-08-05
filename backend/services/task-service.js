@@ -19,7 +19,6 @@ const taskService = {
     if (!description || description.trim() === '') {
       throw new ValidationError('Description is required');
     }
-    // Assume Task is a Sequelize model
     const task = await Task.create({ description });
     return task;
   },
@@ -34,7 +33,9 @@ const taskService = {
   },
 
   getAllTasks: async () => {
-    return await Task.findAll();
+    return await Task.findAll({
+      order: [['created_at', 'DESC']]
+    });
   },
 
   updateTask: async (id, data) => {
