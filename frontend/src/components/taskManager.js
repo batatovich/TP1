@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import taskService from '../taskService';
+import EditTaskModal from './editTaskModal';
 
 const TaskManager = () => {
   const [tasks, setTasks] = useState([]);
-  const [taskDescription, setTaskDescription] = useState('');
+  const [newTaskDescription, setNewTaskDescription] = useState('');
+  const [editTaskDescription, setEditTaskDescription] = useState('');
   const [taskId, setTaskId] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const savedTasks = localStorage.getItem('tasks');
@@ -27,15 +30,15 @@ const TaskManager = () => {
   };
 
   const handleNewTask = () => {
-    if (taskDescription.trim()) {
-      taskService.createTask(taskDescription)
+    if (newTaskDescription.trim()) {
+      taskService.createTask(newTaskDescription)
         .then(newTask => {
           setTasks(prevTasks => {
             const updatedTasks = [newTask, ...prevTasks];
             localStorage.setItem('tasks', JSON.stringify(updatedTasks));
             return updatedTasks;
           });
-          setTaskDescription('');
+          setNewTaskDescription('');
         })
         .catch(error => {
           console.error('There was an error creating the task!', error);
@@ -57,24 +60,31 @@ const TaskManager = () => {
       });
   };
 
-
   const handleEditTask = (task) => {
     setTaskId(task.id);
-    setTaskDescription(task.description);
+    setEditTaskDescription(task.description);
+    setIsModalOpen(true);
   };
 
-  const handleCancelEdit = () => {
-    setTaskId(null);
-    setTaskDescription('');
+  const handleCancelEditTask = () => {
+    setEditTaskDescription('');
+    setIsModalOpen(false);
   };
 
   const handleUpdateTask = () => {
-    if (taskDescription.trim()) {
-      taskService.updateTask(taskId, taskDescription)
+    if (editTaskDescription.trim()) {
+      taskService.updateTask(taskId, editTaskDescription)
         .then(updatedTask => {
-          setTasks(tasks.map(task => (task.id === taskId ? updatedTask : task)));
+          setTasks(prevTasks => {
+            const updatedTasks = prevTasks.map(task =>
+              task.id === taskId ? updatedTask : task
+            );
+            localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+            return updatedTasks;
+          });
+          setIsModalOpen(false);
           setTaskId(null);
-          setTaskDescription('');
+          setEditTaskDescription('');
         })
         .catch(error => {
           console.error('There was an error updating the task!', error);
@@ -90,8 +100,8 @@ const TaskManager = () => {
         <div className="mb-4">
           <input
             type="text"
-            value={taskDescription}
-            onChange={(e) => setTaskDescription(e.target.value)}
+            value={newTaskDescription}
+            onChange={(e) => setNewTaskDescription(e.target.value)}
             placeholder="Enter new task description"
             className="p-2 rounded-md bg-gray-700 text-white w-4/5 mr-2"
           />
@@ -123,7 +133,7 @@ const TaskManager = () => {
                 <td className="px-6 py-4 text-right whitespace-nowrap">
                   <button
                     className="text-blue-500 hover:text-blue-700 mr-4"
-                    onClick={() => { /* logic to edit task */ }}
+                    onClick={() => { handleEditTask(task); }}
                   >
                     Edit
                   </button>
@@ -139,6 +149,13 @@ const TaskManager = () => {
           </tbody>
         </table>
       </div>
+      <EditTaskModal
+        isOpen={isModalOpen}
+        taskDescription={editTaskDescription}
+        setTaskDescription={setEditTaskDescription}
+        onSave={handleUpdateTask}
+        onClose={handleCancelEditTask}
+      />
     </div>
   );
 };
