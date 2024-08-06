@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const EditTaskModal = ({ isOpen, taskDescription, setTaskDescription, onSave, onClose }) => {
   if (!isOpen) return null;
@@ -31,6 +32,14 @@ const EditTaskModal = ({ isOpen, taskDescription, setTaskDescription, onSave, on
       </div>
     </div>
   );
+};
+
+EditTaskModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  taskDescription: PropTypes.string.isRequired,
+  setTaskDescription: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default EditTaskModal;
