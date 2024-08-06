@@ -30,6 +30,7 @@ const taskController = {
       const tasks = await taskService.getAllTasks();
       return res.status(200).json(tasks);
     } catch (error) {
+      console.error(error); 
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   },
